@@ -50,8 +50,8 @@ for host in nscan.all_hosts():
                                     "(ip)".format(host))
                     """
 
-                    sql_connector = mysql.connector.connect(user='python',
-                                                            password='yzh8RB0Bcw1VivO3',
+                    sql_connector = mysql.connector.connect(user='mysq_user',
+                                                            password='mysql_password',
                                                             host='localhost',
                                                             database='test')
 
