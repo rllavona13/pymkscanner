@@ -55,5 +55,5 @@ for host in nscan.all_hosts():
             print(ex)
 
     else:
-    print('No mikrotik found...')
-    exit()
+        print('No mikrotik found...')
+        exit()
