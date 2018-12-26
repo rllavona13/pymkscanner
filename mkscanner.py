@@ -5,7 +5,7 @@ import nmap
 import mysql.connector
 import sys
 import json
-
+from multiprocessing import Semaphore, Process
 
 auth_file = open('auth.json')
 login = json.load(auth_file)
@@ -14,6 +14,8 @@ auth_file.close()
 hosts = sys.argv[1]
 nscan = nmap.PortScanner()
 nscan.scan(hosts=hosts, arguments='-Pn -p 8291')
+
+semaphore = Semaphore(100)
 
 print('Scanning for Mikrotik Routers, your host/range is: %s' % sys.argv[1])
 print('')
