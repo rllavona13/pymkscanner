@@ -7,7 +7,7 @@ import sys
 import json
 from multiprocessing import Semaphore, Process
 
-auth_file = open('auth.json')
+auth_file = open('/home/rrivera/Documents/Python_Projects/pymkscanner/auth.json')
 login = json.load(auth_file)
 auth_file.close()
 
