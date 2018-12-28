@@ -17,6 +17,8 @@ nscan.scan(hosts=hosts, arguments='-Pn -p 8291')
 
 semaphore = Semaphore(100)
 
+print('')
+print('-------------------------------------------------------------')
 print('Scanning for Mikrotik Routers, your host/range is: %s' % sys.argv[1])
 print('')
 
