@@ -5,7 +5,6 @@ import nmap
 import mysql.connector
 import sys
 import json
-from multiprocessing import Semaphore, Process
 
 auth_file = open('/home/rrivera/Documents/Python_Projects/pymkscanner/auth.json')
 login = json.load(auth_file)
@@ -15,7 +14,6 @@ hosts = sys.argv[1]
 nscan = nmap.PortScanner()
 nscan.scan(hosts=hosts, arguments='-Pn -p 8291')
 
-semaphore = Semaphore(100)
 
 print('')
 print('-------------------------------------------------------------')
@@ -35,6 +33,7 @@ for host in nscan.all_hosts():
             identity_fixed = (list_fixed[1])
             # print(json.dumps(mk_scanned_host, indent=4))
             ssh.close()
+
             sql_connector = mysql.connector.connect(user='python',
                                                     password='yzh8RB0Bcw1VivO3',
                                                     host='localhost',
@@ -42,11 +41,15 @@ for host in nscan.all_hosts():
 
             cursor = sql_connector.cursor()
 
-            add_mikrotik = ("INSERT INTO devices"
-                            "(name, ip)"
-                            "VALUES ('%s', '%s')" % (identity_fixed, host))
+            check_data = """SELECT count (*) from devices WHERE name = %s""", identity_fixed
 
-            cursor.execute(add_mikrotik)
+            if check_data == 0:
+                add_mikrotik = ("INSERT INTO devices"
+                                "(name, ip)"
+                                "VALUES ('%s', '%s')" % (identity_fixed, host))
+
+                cursor.execute(add_mikrotik)
+
             sql_connector.commit()
             cursor.close()
             sql_connector.close()
@@ -59,5 +62,5 @@ for host in nscan.all_hosts():
             print(ex)
 
     else:
-        print('No mikrotik found...')
+        print('No Mikrotik found...')
         exit()
