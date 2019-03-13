@@ -14,6 +14,7 @@ hosts = sys.argv[1]
 nscan = nmap.PortScanner()
 nscan.scan(hosts=hosts, arguments='-Pn -p 8291')
 
+
 def mk_scanner():
     for host in nscan.all_hosts():
         if nscan[host]['tcp'][8291]['state']==u'open':
