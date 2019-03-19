@@ -37,7 +37,7 @@ def mk_scanner():
 
                 cursor = sql_connector.cursor()
 
-                check_data = """SELECT count (*) from devices WHERE name = %s""", identity_fixed
+                check_data = """SELECT count (*) from devices WHERE name = %s""", identity_fixed # usar serial no nombre
 
                 if check_data == 0:
                     add_mikrotik = ("INSERT INTO devices"
