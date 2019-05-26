@@ -1,29 +1,28 @@
-__AUTHOR__ = 'Ramon Rivera Llavona'
+#! usr/local/bin/python
 
 import paramiko
 import nmap
 import mysql.connector
 import sys
 import json
-from multiprocessing import Semaphore, Process
 
 auth_file = open('auth.json')
 login = json.load(auth_file)
 auth_file.close()
 
 hosts = sys.argv[1]
+# hosts = '172.31.240.0/24'
 nscan = nmap.PortScanner()
 nscan.scan(hosts=hosts, arguments='-Pn -p 8291')
-
-semaphore = Semaphore(100)
 
 print('')
 print('-------------------------------------------------------------')
 print('Scanning for Mikrotik Routers, your host/range is: %s' % sys.argv[1])
+# print('Scanning for Mikrotik Routers, your host/range is: %s' % hosts)
 print('')
 
 for host in nscan.all_hosts():
-    if nscan[host]['tcp'][8291]['state']==u'open':
+    if nscan[host]['tcp'][8291]['state'] == 'open':
         try:
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -38,7 +37,8 @@ for host in nscan.all_hosts():
             sql_connector = mysql.connector.connect(user='python',
                                                     password='yzh8RB0Bcw1VivO3',
                                                     host='localhost',
-                                                    database='test')
+                                                    database='test',
+                                                    auth_plugin='mysql_native_password')
 
             cursor = sql_connector.cursor()
 
