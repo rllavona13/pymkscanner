@@ -10,23 +10,23 @@ auth_file = open('auth.json')
 login = json.load(auth_file)
 auth_file.close()
 
-hosts = sys.argv[1]
-# hosts = '172.31.240.0/24'
+#hosts = sys.argv[1]
+hosts = '10.255.6.65'
 nscan = nmap.PortScanner()
 nscan.scan(hosts=hosts, arguments='-Pn -p 8291')
 
 print('')
 print('-------------------------------------------------------------')
-print('Scanning for Mikrotik Routers, your host/range is: %s' % sys.argv[1])
-# print('Scanning for Mikrotik Routers, your host/range is: %s' % hosts)
+#print('Scanning for Mikrotik Routers, your host/range is: %s' % sys.argv[1])
+print('Scanning for Mikrotik Routers, your host/range is: %s' % hosts)
 print('')
 
 for host in nscan.all_hosts():
-    if nscan[host]['tcp'][8291]['state'] == 'open':
+    if nscan[host]['tcp'][8291]['state'] == b'open':
         try:
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=host, username=login['username'], password=login['password'], look_for_keys=False)
+            ssh.connect(hostname=host, username=login['username'], password=login['passwod'], look_for_keys=False)
             ssh.invoke_shell()
             stdin, stdout, stderr = ssh.exec_command('system identity print')
             mk_scanned_host = stdout.read()  # saves the output from ssh for MySQL query use
